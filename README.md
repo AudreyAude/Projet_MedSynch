@@ -1,2 +1,2 @@
 # Projet_MedSynch
- projet de centralisation des donnnees des patient dans le domaine de la sante 
+ projet de centralisation des donnees des patient dans le domaine de la sante 
