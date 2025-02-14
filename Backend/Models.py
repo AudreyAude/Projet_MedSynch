@@ -9,3 +9,10 @@ class Medecins(BaseModel) :
     Tel:str
     Matricule:str
     Email:str
+
+
+
+
+class medec(BaseModel):
+    Email:str
+    Mot_de_passe:str

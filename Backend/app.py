@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware # permet la communication ave
 import snowflake.connector as sc 
 import uvicorn  #Pour lancer le serveur
 from dotenv import load_dotenv # pour upload les acces caches
-from .Models import Medecins
+from .Models import Medecins,medec
 from .Function import password_hash,password_verify
 
 load_dotenv()
@@ -56,12 +56,40 @@ async def Inscript_medecin(A:Medecins):
 
 
        return {"message":"Medecin Ajoute avec succes"}
+    
+
+@app.post("/Connect_Medecin")
+
+async def connect_medecin(E:medec):
+    sql= "SELECT * from  MEDSYNCH.MEDSYNCH.MEDECINS  where Email=%s"
+    params=[E.Email]
+    cursor.execute(sql,params)
+    resultat=cursor.fetchone()
+  
+
+    if resultat :
+      x= password_verify(E.Mot_de_passe,resultat[3])
+
+      if x :
+          r={
+              "medecin_id":resultat[0],
+              "nom":resultat[1],
+              "matricule":resultat[5]
+          }
+          
+          return{'message':r}
+      else:
+          return{'message':'mot de passe incorrect'}
+      
+    else:
+        return{'message':'email introuvable'}
+          
+          
+
+
 
 
     
-
-
-
 
 if __name__== "__main__":
     uvicorn.run(app,host="0.0.0.0",port=8000,workers=1)
