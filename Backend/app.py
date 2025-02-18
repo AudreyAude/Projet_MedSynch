@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware # permet la communication ave
 import snowflake.connector as sc 
 import uvicorn  #Pour lancer le serveur
 from dotenv import load_dotenv # pour upload les acces caches
-from .Models import Medecins,medec
+from .Models import Medecins,medec,Patient,Patien,Patie
 from .Function import password_hash,password_verify
 
 load_dotenv()
@@ -83,11 +83,87 @@ async def connect_medecin(E:medec):
       
     else:
         return{'message':'email introuvable'}
+    
+
+@app.post("/Inscription_Patient")
           
+async def Inscript_patient(A:Patient):
+
+    sql = "SELECT * FROM MEDSYNCH.MEDSYNCH.PATIENTS where Email=%s"
+    params=[A.Email]
+    cursor.execute(sql,params)
+    resultat=cursor.fetchone()
+    
+
+    if resultat : 
+        return { "message":f"{A.Email} exixte deja"}
+    
+    else :
+       
+       M = password_hash(A.Mdp)
+       print(M)
+
+       sql =""" 
+       
+       INSERT INTO  MEDSYNCH.MEDSYNCH.PATIENTS (Nom,Prenom,Date_Naissance,Genre,Parents_Ident,Adresse,Email,NAS,Mot_de_Passe)
+       values (%s,%s,%s,%s,%s,%s,%s,%s,%s)
+       
+       """
+
+       params=[A.Nom,A.Prenom,A.Date_Naissance,A.Genre,A.Identifiant_Parent,A.Adresse,A.Email,A.NAS,M]
+       x=cursor.execute(sql,params)
+
+       return {"message":f"{A.Nom} Ajoute avec succes"}
+
+
+
+
+# @app.post("/Connection_Patient")
+
+# async def connect_patient(E:Patien):
+#     sql= "SELECT * from  MEDSYNCH.MEDSYNCH.PATIENTS  where Email=%s"
+#     params=[E.Email]
+#     cursor.execute(sql,params)
+#     resultat=cursor.fetchone()
+  
+
+#     if resultat :
+#       x= password_verify(E.Mdp,resultat[8])
+
+#       if x :
+#           s={
+#               "medecin_id":resultat[0],
+#               "nom":resultat[1],
+#               "NAS":resultat[7]
+#           }
           
+#           return{'message':s}
+#       else:
+#           return{'message':'mot de passe incorrect'}
+      
+#     else:
+#         return{'message':'email introuvable'}
 
+# @app.put("/ModifInfo_Patient")
 
+# async def  modifInfo_patient(P:Patie):
+#     update="SELECT * FROM  MEDSYNCH.MEDSYNCH.PATIENTS WHERE patient_id=%s"
 
+#     params=[P.Email]
+#     cursor.execute(update,params)
+#     resultat=cursor.fetchone()
+
+#     if resultat:
+#         update=""" 
+#         UPDATE  MEDSYNCH.MEDSYNCH.PATIENTS SET (Adresse,Email,Mdp)where patient_id=%s 
+#         values (%s,%s,%s)
+#         """ 
+#         T= password_hash(P.Mdp)
+#         params=[P.Adresse,P.Email,P.Mdp,T]
+#         x=cursor.execute(update,params)
+#         return {"message":"Les information du patient ont été Modifié avec succes"}
+#     else:
+#          return  {"message":"Patient introuvable"}
 
     
 
