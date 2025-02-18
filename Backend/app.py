@@ -118,31 +118,33 @@ async def Inscript_patient(A:Patient):
 
 
 
-# @app.post("/Connection_Patient")
+@app.post("/Connection_Patient")
 
-# async def connect_patient(E:Patien):
-#     sql= "SELECT * from  MEDSYNCH.MEDSYNCH.PATIENTS  where Email=%s"
-#     params=[E.Email]
-#     cursor.execute(sql,params)
-#     resultat=cursor.fetchone()
+async def connect_patient(E:Patien):
+    sql= "SELECT * from  MEDSYNCH.MEDSYNCH.PATIENTS  where Email=%s"
+    params=[E.Email]
+    cursor.execute(sql,params)
+    resultat=cursor.fetchone()
+    
   
 
-#     if resultat :
-#       x= password_verify(E.Mdp,resultat[8])
+    if resultat :
+      x= password_verify(E.Mdp,resultat[9])
+   
 
-#       if x :
-#           s={
-#               "medecin_id":resultat[0],
-#               "nom":resultat[1],
-#               "NAS":resultat[7]
-#           }
+      if x :
+          s={
+              "patient_id":resultat[0],
+              "nom":resultat[1],
+              "NAS":resultat[8]
+          }
           
-#           return{'message':s}
-#       else:
-#           return{'message':'mot de passe incorrect'}
+          return{'message':s}
+      else:
+          return{'message':'mot de passe incorrect'}
       
-#     else:
-#         return{'message':'email introuvable'}
+    else:
+        return{'message':'email introuvable'}
 
 # @app.put("/ModifInfo_Patient")
 
