@@ -9,6 +9,7 @@ class Medecins(BaseModel) :
     Tel:str
     Matricule:str
     Email:str
+    Image:str
 
 
 
@@ -29,6 +30,7 @@ class Patient(BaseModel):
     Email:str
     NAS:str
     Mdp:str
+    Image:str
 
 
 
@@ -37,7 +39,27 @@ class Patien(BaseModel):
     Mdp:str
 
 
-class Patie(BaseModel):
+
+class Modif_Pati(BaseModel):
     Adresse:str
     Email:str
-    Mdp:str
+    Id_Patient:str
+
+class MedecinModif(BaseModel):
+    Nom:str
+    Prenom:str
+    Date_Naissance:str
+    Genre:str
+    Identifiant_Parent:str
+    Adresse:str
+    Email:str
+    NAS:str
+
+class PatientImage(BaseModel):
+    Email:str
+    Image:str
+
+class MedecinImage(BaseModel):
+    Email:str
+    Image:str
+
